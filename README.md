@@ -18,4 +18,7 @@ Menu:
 ![alt text](https://github.com/OlgaYatsenko/springWeb/blob/master/src/main/resources/static/images/Menu.png)
 
 The page to insert order details:
+![alt text](https://github.com/OlgaYatsenko/springWeb/blob/master/src/main/resources/static/images/order_details.png)
+
+Validation alarms:
 ![alt text](https://github.com/OlgaYatsenko/springWeb/blob/master/src/main/resources/static/images/SubmittingIncOrder.png)
