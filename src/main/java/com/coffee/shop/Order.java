@@ -1,54 +1,27 @@
 package com.coffee.shop;
 
+import lombok.AccessLevel;
 import lombok.Data;
-import org.hibernate.validator.constraints.CreditCardNumber;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
-public class Order {
+@Entity
+@NoArgsConstructor(access = AccessLevel.PUBLIC, force = true)
+@Table(name="Order_Products")
+public class Order{
 
-    //end::allButValidation[]
-    @NotBlank(message="Name is required")
-    //tag::allButValidation[]
-    private String name;
-    //end::allButValidation[]
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
 
-    @NotBlank(message="Street is required")
-    //tag::allButValidation[]
-    private String street;
-    //end::allButValidation[]
-
-    @NotBlank(message="City is required")
-    //tag::allButValidation[]
-    private String city;
-    //end::allButValidation[]
-
-    @NotBlank(message="State is required")
-    //tag::allButValidation[]
-    private String state;
-    //end::allButValidation[]
-
-    @NotBlank(message="Zip code is required")
-    //tag::allButValidation[]
-    private String zip;
-    //end::allButValidation[]
-
-    @CreditCardNumber(message="Not a valid credit card number")
-    //tag::allButValidation[]
-    private String ccNumber;
-    //end::allButValidation[]
-
-    @Pattern(regexp="^(0[1-9]|1[0-2])([\\/])([1-9][0-9])$",
-            message="Must be formatted MM/YY")
-    //tag::allButValidation[]
-    private String ccExpiration;
-    //end::allButValidation[]
-
-    @Digits(integer=3, fraction=0, message="Invalid CVV")
-    //tag::allButValidation[]
-    private String ccCVV;
-
+    @ManyToMany(targetEntity=Product.class)
+    //@Size(min=1, message="You must choose at least 1 ingredient")
+    private List<Product> products = new ArrayList<>();
 }

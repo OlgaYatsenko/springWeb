@@ -1,6 +1,9 @@
 package com.coffee.shop.web;
 
+import com.coffee.shop.Customer;
 import com.coffee.shop.Order;
+import com.coffee.shop.data.CustomerRepository;
+import com.coffee.shop.data.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +11,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 
 import javax.validation.Valid;
@@ -15,23 +20,33 @@ import javax.validation.Valid;
 @Slf4j
 @Controller
 @RequestMapping("/orders")
+@SessionAttributes("customer")
 public class OrderController {
 
+    private CustomerRepository customerRepository;
+
+    public OrderController( CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
     @GetMapping("/current")
-    public String displayOrder(Model model){
-        model.addAttribute("order", new Order());
+    public String displayCustomer(){
         return "orderForm";
     }
 
 
     @PostMapping
-    public String processOrder(@Valid  Order order, Errors errors) {
+    public String processOrder(@Valid Customer customer, Errors errors, SessionStatus sessionStatus) {
         if (errors.hasErrors()) {
             return "orderForm";
         }
-        else{
-        log.info("Order submitted: " + order);
-        return "redirect:/";}
+
+        customerRepository.save(customer);
+        sessionStatus.setComplete();
+        customerRepository.findAll().forEach(c->System.out.println(c.getCity()));
+        customerRepository.findAll().forEach(c->System.out.println(c.getOrder().getId()));
+
+        return "redirect:/";
     }
 
 
