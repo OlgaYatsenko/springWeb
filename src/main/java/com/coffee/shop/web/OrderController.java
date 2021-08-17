@@ -1,12 +1,12 @@
 package com.coffee.shop.web;
 
 import com.coffee.shop.Customer;
-import com.coffee.shop.Order;
+
 import com.coffee.shop.data.CustomerRepository;
-import com.coffee.shop.data.OrderRepository;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +24,7 @@ import javax.validation.Valid;
 public class OrderController {
 
     private CustomerRepository customerRepository;
+
 
     public OrderController( CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
@@ -43,8 +44,6 @@ public class OrderController {
 
         customerRepository.save(customer);
         sessionStatus.setComplete();
-        customerRepository.findAll().forEach(c->System.out.println(c.getCity()));
-        customerRepository.findAll().forEach(c->System.out.println(c.getOrder().getId()));
 
         return "redirect:/";
     }
