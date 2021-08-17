@@ -5,9 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class Order{
     private Long id;
 
     @ManyToMany(targetEntity=Product.class)
+    @Size(min=1, message="You must choose at least 1 product")
     //@Size(min=1, message="You must choose at least 1 ingredient")
     private List<Product> products = new ArrayList<>();
 }

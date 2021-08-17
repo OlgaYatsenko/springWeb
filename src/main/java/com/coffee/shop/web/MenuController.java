@@ -10,11 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -46,7 +44,8 @@ public class MenuController {
 
     @GetMapping
     public String showMenuForm(Model model) {
-        List<Product> products = (List<Product>) productRepository.findAll();
+        List<Product> products = new ArrayList<>();
+        productRepository.findAll().forEach(i -> products.add(i));
         model.addAttribute("products", products);
         return "menu";}
 
@@ -61,14 +60,29 @@ public class MenuController {
 //        return "menu";
 //    }
 
+//    @RequestMapping(value = "/menu", method = RequestMethod.GET)
+//    public ModelAndView functionList(Model model, @RequestParam("checkboxname")String[] checkboxvalues) throws Exception {
+//        ModelAndView mv = new ModelAndView("menu");
+//        mv.addObject("functionList", getFunctionsFromDB());
+//        return mv;
+//    }
+
+
 
     @PostMapping
-    public String processDesign(@ModelAttribute("menu") Order order, Customer customer, Model model) {
+    public String processDesign( @RequestParam("productSelected") List<String> listProducts,@ModelAttribute Customer customer) {
       //  if(errors.hasErrors()) return "menu";
+        List<Product> productsSelected=new ArrayList<>();
+        for (String listProduct : listProducts) {productsSelected.add(productRepository.findByName(listProduct));
+        }
+
+        Order order=new Order();
+        order.setProducts(productsSelected);
 
         Order order_saved=orderRepository.save(order);
-        log.info("----------------------------------order saved--"+order_saved.getId()+order_saved.getProducts().toString());
-        order_saved.getProducts().forEach(System.out::println);
+        log.info("----------------------------------order saved--"+order_saved.getId());
+        log.info("----------------------------------order saved--"+order_saved.getProducts());
+
 
         customer.setOrder(order_saved);
         log.info("-------------------------------------------------------order added to the customer");

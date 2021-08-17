@@ -9,10 +9,11 @@
 
 <form method="POST" th:object="${products}">
 
-<div class="Product">
+
+<div class="product" id="product">
     <h3>Choose your product:</h3>
     <div th:each="product : ${products}">
-        <input name="products" type="checkbox" th:unchecked="${product.id}" />
+        <input name="productSelected" type="checkbox" th:value="${product.name}" />
         <span th:text="${product.name}">PRODUCT</span><br/>
 
 
